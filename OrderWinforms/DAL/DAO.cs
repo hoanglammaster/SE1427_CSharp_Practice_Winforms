@@ -27,5 +27,25 @@ namespace OrderWinforms.DAL
             dataAdapter.Fill(table);
             return table;
         }
+        public static void insertDataToSql(SqlCommand command)
+        {
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            adapter.InsertCommand = command;
+            adapter.InsertCommand.ExecuteNonQuery();
+        }
+        public static void runBatchSql(List<String> dbOperations)
+        {
+            SqlConnection conn = DAO.getConnection();
+            conn.Open();
+            SqlTransaction transaction = conn.BeginTransaction();
+
+            foreach (string commandString in dbOperations)
+            {
+                SqlCommand cmd = new SqlCommand(commandString, conn, transaction);
+                cmd.ExecuteNonQuery();
+            }
+
+            transaction.Commit();
+        }
     }
 }

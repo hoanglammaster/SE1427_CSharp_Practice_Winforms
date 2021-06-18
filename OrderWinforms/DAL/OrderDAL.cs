@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrderWinforms.Model;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -59,6 +60,35 @@ namespace OrderWinforms.DAL
             command.Parameters.AddRange(parameter.ToArray());
             return DAO.getTableFromSql(command);
         }
+
+        public void insertOrderToDB(string customerID, int empID, DateTime orderDate, DateTime reqDate, int shipVia, double freight)
+        {
+            string query = "INSERT INTO Orders(CustomerID,EmployeeID,OrderDate,RequiredDate,ShipVia,Freight)" +
+                " VALUES(@CusID, @EmpID,@Order, @Req, @Via, @Freight)";
+            SqlConnection sqlConnection = DAO.getConnection();
+            sqlConnection.Open();
+            SqlCommand command = new SqlCommand(query, sqlConnection);
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@CusID", customerID));
+            parameters.Add(new SqlParameter("@EmpID", empID));
+            parameters.Add(new SqlParameter("@Order", orderDate));
+            parameters.Add(new SqlParameter("@Req", reqDate));
+            parameters.Add(new SqlParameter("@Via", shipVia));
+            parameters.Add(new SqlParameter("@Freight", freight));
+            command.Parameters.AddRange(parameters.ToArray());
+            DAO.insertDataToSql(command);
+            
+        }
+        public void insertOrderDetailsToDB(List<Product> products)
+        {
+            List<string> dbOperations = new List<string>();
+            foreach (Product product in products)
+            {
+                dbOperations.Add("INSERT INTO [Order Details] VALUES ((SELECT MAX(OrderID) FROM Orders), "+product.ProductID+" , "+product.UnitPrice+" , "+product.Quantity+" ,"+product.Discound/100+")");
+            }
+            DAO.runBatchSql(dbOperations);
+        }
+        
 
     }
 }

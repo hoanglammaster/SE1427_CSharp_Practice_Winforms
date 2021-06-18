@@ -1,4 +1,5 @@
 ﻿using OrderWinforms.DAL;
+using OrderWinforms.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,6 +29,16 @@ namespace OrderWinforms.BLL
             }
             
             return convertDataTabelToList(orderDAL.getDataTableOrderWithConditions(customer,employee,from,to,lateOrder));
+        }
+        public void insertOrderToDB(string cusID, int empID, DateTime req, int via, double freight, List<Product> products)
+        {
+            OrderDAL orderDAL = new OrderDAL();
+            ProductDAL productDAL = new ProductDAL();
+            DateTime order = DateTime.Now;
+            orderDAL.insertOrderToDB(cusID, empID, order, req, via, freight);
+            orderDAL.insertOrderDetailsToDB(products);
+            productDAL.reduceUnitInStockOfProduct(products);
+            
         }
         //convert DataTable to List<Order>
         private List<Order> convertDataTabelToList(DataTable orderTabel)

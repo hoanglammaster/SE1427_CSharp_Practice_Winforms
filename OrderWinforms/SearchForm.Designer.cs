@@ -1,7 +1,7 @@
 ﻿
 namespace OrderWinforms
 {
-    partial class Form1
+    partial class SearchForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,6 +29,7 @@ namespace OrderWinforms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchForm));
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -101,6 +102,7 @@ namespace OrderWinforms
             this.button1.TabIndex = 15;
             this.button1.Text = "Create";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label4
             // 
@@ -150,7 +152,7 @@ namespace OrderWinforms
             this.dataGridView1.Size = new System.Drawing.Size(759, 320);
             this.dataGridView1.TabIndex = 21;
             // 
-            // Form1
+            // SearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -166,8 +168,10 @@ namespace OrderWinforms
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "SearchForm";
+            this.Text = "Search Order";
+            this.Load += new System.EventHandler(this.SearchForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

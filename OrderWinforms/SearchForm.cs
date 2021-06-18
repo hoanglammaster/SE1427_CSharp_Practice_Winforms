@@ -10,14 +10,13 @@ using System.Windows.Forms;
 
 namespace OrderWinforms
 {
-    public partial class Form1 : Form
+    public partial class SearchForm : Form
     {
-        public Form1()
+        public SearchForm()
         {
             InitializeComponent();
-            loadData();
         }
-        private void loadData()
+        private void SearchForm_Load(object sender, EventArgs e)
         {
             OrderBLL orderBLL = new OrderBLL();
             List<Order> listOrder = orderBLL.getListAllOrder();
@@ -41,13 +40,7 @@ namespace OrderWinforms
             comboBox2.SelectedItem = listEmployee[0];
             dataGridView1.DataSource = listOrder;
         }
-        //  từ cái getall tách ra customer được,
-        private void reloadData()
-        {
-            OrderBLL orderBLL = new OrderBLL();
-            List<Order> listOrder = orderBLL.getListOrderWithConditions(comboBox1.SelectedItem.ToString(), comboBox2.SelectedItem.ToString(), dateTimePicker1.Value.Date, dateTimePicker2.Value.Date, checkBox1.Checked);
-            dataGridView1.DataSource = listOrder;
-        }
+        
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //kiểm tra combo box 2 null vì lúc program load lần đầu, lúc comboBox1 add item
@@ -84,5 +77,19 @@ namespace OrderWinforms
         {
             reloadData();
         }
+
+        public void reloadData()
+        {
+            OrderBLL orderBLL = new OrderBLL();
+            List<Order> listOrder = orderBLL.getListOrderWithConditions(comboBox1.SelectedItem.ToString(), comboBox2.SelectedItem.ToString(), dateTimePicker1.Value.Date, dateTimePicker2.Value.Date, checkBox1.Checked);
+            dataGridView1.DataSource = listOrder;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CreateForm createForm = new CreateForm();
+            createForm.Show();
+        }
+
     }
 }
