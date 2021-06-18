@@ -37,8 +37,8 @@ namespace OrderWinforms.BLL
             OrderDAL orderDAL = new OrderDAL();
             ProductDAL productDAL = new ProductDAL();
             DateTime order = DateTime.Parse(DateTime.Now.ToString("MM-dd-yyyy"));
-            orderDAL.insertOrderToDB(cusID, empID, order, req, via, freight);
-            orderDAL.insertOrderDetailsToDB(products);
+            int orderID = orderDAL.insertOrderToDB(cusID, empID, order, req, via, freight);
+            orderDAL.insertOrderDetailsToDB(products, orderID);
             productDAL.reduceUnitInStockOfProduct(products);
             
         }

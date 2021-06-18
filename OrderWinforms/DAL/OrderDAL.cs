@@ -61,10 +61,10 @@ namespace OrderWinforms.DAL
             return DAO.getTableFromSql(command);
         }
 
-        public void insertOrderToDB(string customerID, int empID, DateTime orderDate, DateTime reqDate, int shipVia, double freight)
+        public int insertOrderToDB(string customerID, int empID, DateTime orderDate, DateTime reqDate, int shipVia, double freight)
         {
             string query = "INSERT INTO Orders(CustomerID,EmployeeID,OrderDate,RequiredDate,ShipVia,Freight)" +
-                " VALUES(@CusID, @EmpID,@Order, @Req, @Via, @Freight)";
+                " VALUES(@CusID, @EmpID,@Order, @Req, @Via, @Freight) SELECT @@IDENTITY AS ID";
             SqlConnection sqlConnection = DAO.getConnection();
             sqlConnection.Open();
             SqlCommand command = new SqlCommand(query, sqlConnection);
@@ -76,19 +76,22 @@ namespace OrderWinforms.DAL
             parameters.Add(new SqlParameter("@Via", shipVia));
             parameters.Add(new SqlParameter("@Freight", freight));
             command.Parameters.AddRange(parameters.ToArray());
-            DAO.insertDataToSql(command);
-            
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            DataRow row = dataTable.Rows[0];
+            int result = Int32.Parse(row["ID"].ToString());
+
+            return result;         
         }
-        public void insertOrderDetailsToDB(List<Product> products)
+        public void insertOrderDetailsToDB(List<Product> products, int orderId)
         {
             List<string> dbOperations = new List<string>();
             foreach (Product product in products)
             {
-                dbOperations.Add("INSERT INTO [Order Details] VALUES ((SELECT MAX(OrderID) FROM Orders), "+product.ProductID+" , "+product.UnitPrice+" , "+product.Quantity+" ,"+product.Discound/100+")");
+                dbOperations.Add("INSERT INTO [Order Details] VALUES ( "+orderId+" , "+product.ProductID+" , "+product.UnitPrice+" , "+product.Quantity+" ,"+product.Discound/100+")");
             }
             DAO.runBatchSql(dbOperations);
-        }
-        
-
+        }  
     }
 }
