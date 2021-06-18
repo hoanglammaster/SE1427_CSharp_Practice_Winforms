@@ -96,6 +96,7 @@ namespace OrderWinforms
             ProductBLL productBLL = new ProductBLL();
             listBox1.DataSource = productBLL.getListAllProduct();
             dataGridView1.DataSource = null;
+            textBox1.Text = "";
             Program.searchForm.reloadData();
         }
     }

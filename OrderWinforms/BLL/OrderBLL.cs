@@ -3,6 +3,7 @@ using OrderWinforms.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -32,9 +33,10 @@ namespace OrderWinforms.BLL
         }
         public void insertOrderToDB(string cusID, int empID, DateTime req, int via, double freight, List<Product> products)
         {
+            string pattern = "MM-dd-yyyy";
             OrderDAL orderDAL = new OrderDAL();
             ProductDAL productDAL = new ProductDAL();
-            DateTime order = DateTime.Now;
+            DateTime order = DateTime.Parse(DateTime.Now.ToString("MM-dd-yyyy"));
             orderDAL.insertOrderToDB(cusID, empID, order, req, via, freight);
             orderDAL.insertOrderDetailsToDB(products);
             productDAL.reduceUnitInStockOfProduct(products);
